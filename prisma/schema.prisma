@@ -1,0 +1,345 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model address {
+  registration_no String   @id @db.Char(10)
+  street_address  String   @db.Text
+  district        String   @db.VarChar(50)
+  division        String   @db.VarChar(50)
+  phone_no        String?  @db.Char(10)
+  mobile_no       String?  @db.Char(10)
+  latitude        Decimal? @db.Decimal(10, 5)
+  longitude       Decimal? @db.Decimal(10, 5)
+  hospital        hospital @relation(fields: [registration_no], references: [registration_no], onDelete: Cascade, map: "address_fk0")
+}
+
+model booking {
+  id              String              @id @db.Char(10)
+  booked_at       DateTime            @default(now()) @db.DateTime(0)
+  user_mobile_no  String              @db.Char(10)
+  name            String?             @db.VarChar(50)
+  sex             booking_sex
+  bed_type        booking_bed_type
+  booked_for      booking_booked_for?
+  cancelled_at    DateTime?           @db.DateTime(0)
+  cancelled_by    String?             @db.Char(10)
+  registration_no String              @db.Char(10)
+  status          booking_status
+  remarks         String?             @db.TinyText
+  last_updated    DateTime            @default(now()) @db.DateTime(0)
+  hospital        hospital            @relation(fields: [registration_no], references: [registration_no], onDelete: Cascade, map: "booking_fk1")
+  user            user                @relation(fields: [user_mobile_no], references: [mobile_no], onDelete: Cascade, map: "booking_fk0")
+
+  @@index([user_mobile_no], map: "booking_fk0")
+  @@index([registration_no], map: "booking_fk1")
+}
+
+model capacity {
+  registration_no String   @id @db.Char(10)
+  total_capacity  Int      @db.UnsignedMediumInt
+  ward            Int?     @db.UnsignedSmallInt
+  special_ward    Int?     @db.UnsignedSmallInt
+  cabin           Int?     @db.UnsignedTinyInt
+  icu             Int?     @db.UnsignedTinyInt
+  ccu             Int?     @db.UnsignedTinyInt
+  covidu          Int?     @db.UnsignedSmallInt
+  hospital        hospital @relation(fields: [registration_no], references: [registration_no], onDelete: Cascade, map: "capacity_fk0")
+}
+
+model hospital {
+  registration_no String                 @id @db.Char(10)
+  hospital_name   String                 @unique(map: "hospital_name") @db.VarChar(100)
+  description     String?                @db.Text
+  hospital_type   hospital_hospital_type
+  bed_type        String
+  image_source    String?                @db.VarChar(500)
+  website         String?                @db.TinyText
+  joined_on       DateTime               @default(now()) @db.DateTime(0)
+  status          hospital_status        @default(private)
+  address         address?
+  appointment     appointment[]
+  booking         booking[]
+  capacity        capacity?
+  doctor          doctor[]
+  log             log[]
+  staff           staff[]
+  vacant_bed_log  vacant_bed_log[]
+}
+
+model log {
+  logged_at       DateTime @default(now()) @db.DateTime(0)
+  registration_no String   @db.Char(10)
+  task            String   @db.TinyText
+  mobile_no       String   @db.Char(10)
+  role            log_role
+  staff           staff    @relation(fields: [mobile_no], references: [mobile_no], onDelete: Cascade, map: "log_fk1")
+  hospital        hospital @relation(fields: [registration_no], references: [registration_no], onDelete: Cascade, map: "log_fk0")
+
+  @@id([logged_at, registration_no])
+  @@index([registration_no], map: "log_fk0")
+  @@index([mobile_no], map: "log_fk1")
+}
+
+model staff {
+  mobile_no       String       @db.Char(10)
+  password        String       @db.Char(50)
+  name            String       @db.VarChar(50)
+  email           String       @unique(map: "email") @db.VarChar(50)
+  role            staff_role
+  status          staff_status
+  registration_no String       @db.Char(10)
+  joined_on       DateTime     @default(now()) @db.DateTime(0)
+  last_updated    DateTime     @default(now()) @db.DateTime(0)
+  hospital        hospital     @relation(fields: [registration_no], references: [registration_no], onDelete: Cascade, map: "staff_fk0")
+  log             log[]
+
+  @@id([mobile_no, registration_no, joined_on])
+  @@index([registration_no], map: "staff_fk0")
+}
+
+model user {
+  mobile_no   String        @id @db.Char(10)
+  password    String        @db.VarChar(50)
+  name        String        @db.VarChar(50)
+  sex         user_sex
+  dob         DateTime      @db.Date
+  email       String?       @unique(map: "email") @db.VarChar(50)
+  document_id String?       @unique(map: "document_id") @db.Char(17)
+  joined_on   DateTime      @default(now()) @db.DateTime(0)
+  appointment appointment[]
+  booking     booking[]
+}
+
+model vacant_bed_log {
+  registration_no String   @db.Char(10)
+  last_updated    DateTime @default(now()) @db.DateTime(0)
+  ward            Int?     @db.UnsignedSmallInt
+  special_ward    Int?     @db.UnsignedSmallInt
+  cabin           Int?     @db.UnsignedTinyInt
+  icu             Int?     @db.UnsignedTinyInt
+  ccu             Int?     @db.UnsignedTinyInt
+  covidu          Int?     @db.UnsignedSmallInt
+  hospital        hospital @relation(fields: [registration_no], references: [registration_no], onDelete: Cascade, map: "vacant_bed_log_fk0")
+
+  @@id([registration_no, last_updated])
+}
+
+model doctor {
+  id              String            @db.Char(10)
+  password        String            @db.VarChar(50)
+  email           String            @unique(map: "email") @db.VarChar(50)
+  registration_no String            @db.Char(10)
+  name            String            @db.VarChar(50)
+  sex             doctor_sex
+  department      doctor_department
+  specialization  String            @db.VarChar(512)
+  chamber         String?           @db.VarChar(10)
+  bio             String?           @db.Text
+  image_source    String?           @db.VarChar(500)
+  joined_on       DateTime          @default(now()) @db.DateTime(0)
+  status          doctor_status
+  hospital        hospital          @relation(fields: [registration_no], references: [registration_no], onDelete: Cascade, map: "doctor_fk0")
+  appointment     appointment[]
+  schedule        schedule[]
+
+  @@id([id, registration_no, joined_on])
+  @@index([registration_no], map: "doctor_fk0")
+}
+
+model schedule {
+  doctor_id    String       @db.Char(10)
+  day          schedule_day
+  start_time   DateTime     @db.Time(0)
+  end_time     DateTime     @db.Time(0)
+  last_updated DateTime     @default(now()) @db.DateTime(0)
+  doctor       doctor       @relation(fields: [doctor_id], references: [id], onDelete: Cascade, map: "schedule_fk0")
+
+  @@id([doctor_id, day])
+}
+
+model appointment {
+  id              String             @id @db.Char(10)
+  user_mobile_no  String             @db.Char(10)
+  name            String             @db.VarChar(50)
+  sex             appointment_sex
+  for             appointment_for    @default(Self)
+  doctor_id       String             @db.Char(10)
+  time            DateTime           @default(now()) @db.DateTime(0)
+  status          appointment_status
+  cancelled_at    DateTime?          @db.DateTime(0)
+  cancelled_by    String?            @db.Char(10)
+  registration_no String             @db.Char(10)
+  remarks         String?            @db.TinyText
+  last_updated    DateTime           @default(now()) @db.DateTime(0)
+  doctor          doctor             @relation(fields: [doctor_id], references: [id], onDelete: Cascade, map: "appointment_fk1")
+  hospital        hospital           @relation(fields: [registration_no], references: [registration_no], onDelete: Cascade, map: "appointment_fk2")
+  user            user               @relation(fields: [user_mobile_no], references: [mobile_no], onDelete: Cascade, map: "appointment_fk0")
+
+  @@index([user_mobile_no], map: "appointment_fk0")
+  @@index([doctor_id], map: "appointment_fk1")
+  @@index([registration_no], map: "appointment_fk2")
+}
+
+enum booking_bed_type {
+  Ward
+  Special_Ward @map("Special Ward")
+  Cabin
+  ICU
+  CCU
+  COVIDU
+}
+
+enum booking_booked_for {
+  Self
+  Father
+  Mother
+  Brother
+  Sister
+  Relative
+  Friend
+  Stranger
+}
+
+enum hospital_hospital_type {
+  Public
+  Private
+}
+
+enum log_role {
+  Admin
+  DB_Manager @map("DB Manager")
+  Moderator
+}
+
+enum staff_role {
+  Admin
+  DB_Manager @map("DB Manager")
+  Moderator
+}
+
+enum booking_sex {
+  M
+  F
+  T
+  S
+}
+
+enum user_sex {
+  M
+  F
+  T
+  S
+}
+
+enum hospital_status {
+  public
+  private
+  deleted
+}
+
+enum staff_status {
+  Active
+  Inactive
+}
+
+enum booking_status {
+  Requested
+  Booked
+  Served
+  Cancelled
+}
+
+enum doctor_status {
+  Active
+  Inactive
+}
+
+enum appointment_sex {
+  M
+  F
+  T
+  S
+}
+
+enum appointment_status {
+  Requested
+  Confirmed
+  Completed
+  Cancelled
+}
+
+enum appointment_for {
+  Self
+  Father
+  Mother
+  Brother
+  Sister
+  Relative
+  Friend
+  Stranger
+}
+
+enum doctor_sex {
+  M
+  F
+  T
+  S
+}
+
+enum doctor_department {
+  Anesthesiology
+  Audiology
+  Cardiology
+  Cardiothoracic_Surgery @map("Cardiothoracic Surgery")
+  Dental_Sciences @map("Dental Sciences")
+  Dermatology
+  Electrophysiology
+  Emergency_Medicine @map("Emergency Medicine")
+  Endocrinology
+  ENT
+  Family_Medicine @map("Family Medicine")
+  Gastroenterology
+  General_Surgery @map("General Surgery")
+  Genetics
+  Gynecology
+  Haemato_Oncology @map("Haemato Oncology")
+  Internal_Medicine @map("Internal Medicine")
+  Microbiology
+  Nephrology
+  Neurology
+  Neurosurgery
+  Nuclear_Medicine @map("Nuclear Medicine")
+  Obstetrics_and_Gynecology @map("Obstetrics and Gynecology")
+  Oncology
+  Ophthalmology
+  Oral_and_Maxillofacial_Surgery @map("Oral and Maxillofacial Surgery")
+  Orthopedics
+  Pediatrics
+  Physiotherapy
+  Plastic_Surgery @map("Plastic Surgery")
+  Psychiatry
+  Pulmonology
+  Radiology
+  Reproductive_Medicine @map("Reproductive Medicine")
+  Rheumatology
+  Stroke_Unit @map("Stroke Unit")
+  Urology
+  Uro_Oncology @map("Uro Oncology")
+  Vascular_Surgery @map("Vascular Surgery")
+}
+
+enum schedule_day {
+  A
+  S
+  M
+  T
+  W
+  R
+  F
+}

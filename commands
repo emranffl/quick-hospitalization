@@ -1,0 +1,34 @@
+git:
+    git pull
+    git status
+    git add .
+    git commit -m "commit message date-author"
+    git log
+    git fetch --all
+    git reset --hard origin/master
+    git pull https://github.com/ORIGINAL_OWNER/ORIGINAL_REPOSITORY.git BRANCH_NAME
+    
+npm:
+    npm run dev (for development)
+    npm run build
+    npm run start
+
+prisma:
+    npx prisma db pull
+    npx prisma generate
+    npx prisma studio
+
+versioning:
+    npm --no-git-tag-version version patch
+
+
+# Before coding:-
+    * git pull https://github.com/emranffl/quick-hospitalization.git main
+    
+
+# After coding:-
+    1. git status (optional)
+    2. git add .
+    3. git status
+    4. git commit -m "commit message date-author"
+        e.g. git commit -m "added signup form 02.06.2021-emran"

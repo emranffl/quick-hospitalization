@@ -1,0 +1,780 @@
+@import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@200;300;400&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Roboto:300i,400,400i,500,700,900");
+html {
+  scroll-behavior: smooth;
+  scrollbar-color: #777 #555;
+  scrollbar-width: 0.7vw;
+}
+
+html::-webkit-scrollbar {
+  width: 0.7vw;
+}
+
+html::-webkit-scrollbar-thumb {
+  background-color: #555;
+  border-radius: 0.5rem;
+}
+
+html::-webkit-scrollbar-thumb:hover {
+  background-color: #221;
+}
+
+html::-webkit-scrollbar-track {
+  background-color: #777;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: "Roboto", -apple-system, BlinkMacSystemFont, "Segoe UI", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#f0edef), color-stop(#eee8ee), color-stop(#e9e3ee), color-stop(#e2dff0), color-stop(#d9dbf1), color-stop(#d2d9f2), color-stop(#c9d7f3), color-stop(#c0d5f4), color-stop(#bad4f5), color-stop(#b3d2f6), color-stop(#acd1f7), to(#a5d0f8));
+  background-image: linear-gradient(to bottom, #f0edef, #eee8ee, #e9e3ee, #e2dff0, #d9dbf1, #d2d9f2, #c9d7f3, #c0d5f4, #bad4f5, #b3d2f6, #acd1f7, #a5d0f8);
+}
+
+#__next {
+  min-height: 100vh;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+input[type="checkbox"],
+input[type="radio"] {
+  height: 1.2rem;
+  width: 1.2rem;
+}
+
+button:focus {
+  outline: none !important;
+  -webkit-box-shadow: none !important;
+          box-shadow: none !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  -webkit-box-shadow: none !important;
+  box-shadow: none !important;
+  border: 1px solid #0f02c0;
+  outline-width: 0;
+}
+
+.hvr-grow {
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-transform: translateZ(0);
+          transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-transition-duration: 0.2s;
+          transition-duration: 0.2s;
+  -webkit-transition-property: -webkit-transform;
+  transition-property: -webkit-transform;
+  transition-property: transform;
+  transition-property: transform, -webkit-transform;
+}
+
+.hvr-grow:hover, .hvr-grow:focus, .hvr-grow:active {
+  -webkit-box-shadow: 0 0.7rem 1rem rgba(0, 0, 0, 0.23);
+          box-shadow: 0 0.7rem 1rem rgba(0, 0, 0, 0.23);
+  -webkit-transform: scale(1.1);
+          transform: scale(1.1);
+}
+
+.hvr-float {
+  display: inline-block;
+  vertical-align: middle;
+  -webkit-transform: translateZ(0);
+          transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+          backface-visibility: hidden;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-transition-duration: 0.2s;
+          transition-duration: 0.2s;
+  -webkit-transition-property: -webkit-transform;
+  transition-property: -webkit-transform;
+  transition-property: transform;
+  transition-property: transform, -webkit-transform;
+}
+
+.hvr-float:hover {
+  -webkit-box-shadow: 0 0.7rem 1.3rem rgba(0, 0, 0, 0.1);
+          box-shadow: 0 0.7rem 1.3rem rgba(0, 0, 0, 0.1);
+  -webkit-transform: translateY(-3px);
+          transform: translateY(-3px);
+}
+
+.clamp-mw-50 {
+  max-width: clamp(320px, 50%, 425px) !important;
+}
+
+.fs-7 {
+  font-size: 0.9rem;
+}
+
+.dropright .dropdown-toggle::after {
+  display: none;
+}
+
+/* ------------------------- global ----------------------------- */
+.server-error {
+  -webkit-backdrop-filter: blur(7px);
+          backdrop-filter: blur(7px);
+}
+
+.server-error h1 {
+  font-family: "Quicksand", sans-serif;
+  font-size: 10rem;
+  line-height: 10rem;
+  font-weight: 200;
+  text-align: center;
+}
+
+.server-error h2 {
+  font-family: "Encode Sans Semi Condensed", Verdana, sans-serif;
+  font-size: 1.5rem;
+  font-weight: 200;
+  text-align: center;
+}
+
+.server-error h1,
+.server-error h2 {
+  transition: opacity 0.5s linear, margin-top 0.5s linear;
+  -webkit-transition: opacity 0.5s linear, margin-top 0.5s linear;
+  /* Safari */
+}
+
+.server-error .loading h1,
+.server-error .loading h2 {
+  margin-top: 0px;
+  opacity: 0;
+}
+
+.server-error .gears {
+  position: relative;
+  margin: 0 auto;
+  width: auto;
+  height: 170px;
+}
+
+.server-error .gear {
+  position: relative;
+  z-index: 0;
+  width: 120px;
+  height: 120px;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: red;
+}
+
+.server-error .gear:before {
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  right: 5px;
+  bottom: 5px;
+  z-index: 2;
+  content: "";
+  border-radius: 50%;
+  background: #eaeaea;
+}
+
+.server-error .gear:after {
+  position: absolute;
+  left: 25px;
+  top: 25px;
+  z-index: 3;
+  content: "";
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 5px solid black;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+  background: #eaeaea;
+}
+
+.server-error .gear.one {
+  left: -130px;
+}
+
+.server-error .gear.two {
+  top: -75px;
+}
+
+.server-error .gear.three {
+  top: -235px;
+  left: 130px;
+}
+
+.server-error .gear .bar {
+  position: absolute;
+  left: -15px;
+  top: 50%;
+  z-index: 0;
+  width: 150px;
+  height: 30px;
+  margin-top: -15px;
+  border-radius: 5px;
+  background: black;
+}
+
+.server-error .gear .bar:before {
+  position: absolute;
+  left: 5px;
+  top: 5px;
+  right: 5px;
+  bottom: 5px;
+  z-index: 1;
+  content: "";
+  border-radius: 2px;
+  background: #eaeaea;
+}
+
+.server-error .gear .bar:nth-child(2) {
+  transform: rotate(60deg);
+  -webkit-transform: rotate(60deg);
+}
+
+.server-error .gear .bar:nth-child(3) {
+  transform: rotate(120deg);
+  -webkit-transform: rotate(120deg);
+}
+
+@-webkit-keyframes clockwiseError {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  20% {
+    -webkit-transform: rotate(30deg);
+  }
+  40% {
+    -webkit-transform: rotate(25deg);
+  }
+  60% {
+    -webkit-transform: rotate(30deg);
+  }
+  100% {
+    -webkit-transform: rotate(0deg);
+  }
+}
+
+@keyframes clockwiseError {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  20% {
+    -webkit-transform: rotate(30deg);
+  }
+  40% {
+    -webkit-transform: rotate(25deg);
+  }
+  60% {
+    -webkit-transform: rotate(30deg);
+  }
+  100% {
+    -webkit-transform: rotate(0deg);
+  }
+}
+
+@-webkit-keyframes anticlockwiseErrorStop {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  20% {
+    -webkit-transform: rotate(-30deg);
+  }
+  60% {
+    -webkit-transform: rotate(-30deg);
+  }
+  100% {
+    -webkit-transform: rotate(0deg);
+  }
+}
+
+@keyframes anticlockwiseErrorStop {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  20% {
+    -webkit-transform: rotate(-30deg);
+  }
+  60% {
+    -webkit-transform: rotate(-30deg);
+  }
+  100% {
+    -webkit-transform: rotate(0deg);
+  }
+}
+
+@-webkit-keyframes anticlockwiseError {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  20% {
+    -webkit-transform: rotate(-30deg);
+  }
+  40% {
+    -webkit-transform: rotate(-25deg);
+  }
+  60% {
+    -webkit-transform: rotate(-30deg);
+  }
+  100% {
+    -webkit-transform: rotate(0deg);
+  }
+}
+
+@keyframes anticlockwiseError {
+  0% {
+    -webkit-transform: rotate(0deg);
+  }
+  20% {
+    -webkit-transform: rotate(-30deg);
+  }
+  40% {
+    -webkit-transform: rotate(-25deg);
+  }
+  60% {
+    -webkit-transform: rotate(-30deg);
+  }
+  100% {
+    -webkit-transform: rotate(0deg);
+  }
+}
+
+.server-error .gear.one {
+  animation: anticlockwiseErrorStop 2s linear infinite;
+  -webkit-animation: anticlockwiseErrorStop 2s linear infinite;
+}
+
+.server-error .gear.two {
+  animation: anticlockwiseError 2s linear infinite;
+  -webkit-animation: anticlockwiseError 2s linear infinite;
+}
+
+.server-error .gear.three {
+  animation: clockwiseError 2s linear infinite;
+  -webkit-animation: clockwiseError 2s linear infinite;
+}
+
+/* ------------------------- 500 page specific ----------------------------- */
+.hospital_signup_form #msform fieldset {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.hospital_signup_form #msform fieldset:not(:first-of-type) {
+  display: none;
+}
+
+.hospital_signup_form .fs-title {
+  font-size: 1.3rem;
+  color: #673ab7;
+  margin-bottom: 15px;
+  font-weight: normal;
+}
+
+.hospital_signup_form .steps {
+  font-size: 1rem;
+  color: gray;
+  margin-bottom: 10px;
+  font-weight: normal;
+  text-align: right;
+}
+
+.hospital_signup_form #progressbar {
+  overflow: hidden;
+  color: lightgrey;
+  -webkit-padding-start: 0;
+          padding-inline-start: 0;
+  margin: 0;
+  margin-bottom: -1.4rem;
+}
+
+.hospital_signup_form #progressbar .active {
+  color: #7e48d4;
+}
+
+.hospital_signup_form #progressbar li {
+  list-style-type: none;
+  font-size: 14px;
+  font-weight: 400;
+}
+
+.hospital_signup_form .progress {
+  height: 2px;
+  margin-bottom: 5px;
+}
+
+.hospital_signup_form .fit-image {
+  width: 100%;
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.hospital_signup_form input[type="number"]::-webkit-inner-spin-button,
+.hospital_signup_form input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+}
+
+/* ------------------------- hospital signup page specific ----------------------------- */
+.user_signup_form {
+  display: block;
+  overflow-x: hidden;
+}
+
+.user_signup_form #msform {
+  position: relative;
+  padding-top: 50px;
+  min-height: 820px;
+  height: auto;
+  max-width: 820px;
+  margin: 0 auto;
+  background: #ffffff;
+  z-index: 1;
+}
+
+.user_signup_form #msform #progressbar {
+  margin: 2rem 0;
+  overflow: hidden;
+}
+
+.user_signup_form #msform #progressbar li {
+  list-style-type: none;
+  color: #99a2a8;
+  font-size: 9px;
+  width: calc(100% / 3);
+  float: left;
+  position: relative;
+  font: 500 13px/1 "Roboto", sans-serif;
+}
+
+.user_signup_form #msform #progressbar li:nth-child(2):before {
+  content: "\f12e";
+}
+
+.user_signup_form #msform #progressbar li:nth-child(3):before {
+  content: "\f472";
+}
+
+.user_signup_form #msform #progressbar li:before {
+  content: "\f1fa";
+  font: normal normal normal 30px/50px Ionicons;
+  width: 50px;
+  height: 50px;
+  line-height: 50px;
+  display: block;
+  background: #eaf0f4;
+  border-radius: 50%;
+  margin: 0 auto 10px auto;
+}
+
+.user_signup_form #msform #progressbar li:after {
+  content: "";
+  width: 100%;
+  height: 3px;
+  background: #eaf0f4;
+  position: absolute;
+  left: -50%;
+  top: 21px;
+  z-index: -1;
+}
+
+.user_signup_form #msform #progressbar li:last-child:after {
+  width: 150%;
+}
+
+.user_signup_form #msform #progressbar li.active {
+  color: #5cb85c;
+}
+
+.user_signup_form #msform #progressbar li.active:before {
+  background: #5cb85c;
+  color: white;
+}
+
+.user_signup_form #msform #progressbar li.active:after {
+  background: #5cb85c;
+  color: white;
+}
+
+.user_signup_form #msform fieldset {
+  border: 0;
+  position: relative;
+  width: 100%;
+  left: 0;
+  right: 0;
+}
+
+.user_signup_form #msform fieldset:not(:first-of-type) {
+  display: none;
+}
+
+.user_signup_form #msform fieldset .done_text .done_icon {
+  height: 36px;
+  width: 36px;
+  line-height: 36px;
+  font-size: 22px;
+  margin-bottom: 10px;
+  background: #5cb85c;
+  display: inline-block;
+  border-radius: 50%;
+  color: #ffffff;
+  text-align: center;
+}
+
+.user_signup_form #msform fieldset .done_text h6 {
+  line-height: 23px;
+}
+
+.user_signup_form #msform fieldset .code_group .form-control {
+  border: 0;
+  border-bottom: 1px solid #a1a7ac;
+  border-radius: 0;
+  display: inline-block;
+  width: 32px;
+  font-size: 30px;
+  color: #5f6771;
+  padding: 0;
+  margin-right: 7px;
+  text-align: center;
+  line-height: 1;
+}
+
+.user_signup_form #msform fieldset input[name="docType"] {
+  height: 1.1rem;
+  width: 1.1rem;
+}
+
+.user_signup_form #msform fieldset .custom-file {
+  max-width: 320px;
+}
+
+.user_signup_form #msform fieldset .custom-file .custom-file-label {
+  max-width: 250px;
+  cursor: pointer;
+  border: 1px solid #99a2a8;
+  color: #5f6771;
+}
+
+.user_signup_form #msform fieldset .custom-file .custom-file-label:hover {
+  background: #5cb85c;
+  border-color: #5cb85c;
+  color: #fff;
+}
+
+.user_signup_form #msform fieldset .custom-file .custom-file-label:focus {
+  background: #5cb85c;
+  border-color: #5cb85c;
+  color: #fff;
+}
+
+.user_signup_form #msform .action-button {
+  background: #5cb85c;
+  color: white;
+  cursor: pointer;
+  border: 1px solid #5cb85c;
+  margin: 0 5px;
+  margin-bottom: 10px;
+  display: inline-block;
+}
+
+.user_signup_form #msform .action-button:hover {
+  background: #405867;
+  border-color: #405867;
+}
+
+.user_signup_form #msform .action-button:focus {
+  background: #405867;
+  border-color: #405867;
+}
+
+.user_signup_form #msform .previous_button {
+  background: transparent;
+  color: #99a2a8;
+  border-color: #99a2a8;
+}
+
+.user_signup_form #msform .previous_button:hover {
+  background: #405867;
+  border-color: #405867;
+  color: #fff;
+}
+
+.user_signup_form #msform .previous_button:focus {
+  background: #405867;
+  border-color: #405867;
+  color: #fff;
+}
+
+/* ------------------------- user signup page specific ----------------------------- */
+#callToAction a:hover > i {
+  -webkit-transition: all 0.25s ease-in;
+  transition: all 0.25s ease-in;
+  -webkit-transform: scale(1.3);
+          transform: scale(1.3);
+}
+
+#callToAction a:not(:hover) > i {
+  -webkit-transition: all 0.2s ease-out;
+  transition: all 0.2s ease-out;
+  -webkit-transform: scale(1);
+          transform: scale(1);
+}
+
+/* ------------------------- home page specific ----------------------------- */
+@media (min-width: 992px) {
+  .dashboard {
+    min-height: 100vh;
+  }
+}
+
+.dashboard #offcanvasStartContent .nav-item .nav-link {
+  color: #fff;
+  border: solid 2px #212529;
+  border-width: 0 0 0 3px;
+}
+
+.dashboard #offcanvasStartContent .nav-item .nav-link.active {
+  color: #495057;
+}
+
+.dashboard #offcanvasStartContent .nav-item .nav-link:hover {
+  border-color: #5cb85c;
+}
+
+.dashboard #offcanvasStartContent .nav-item .nav-link i {
+  background-color: #212529;
+}
+
+.dashboard #offcanvasStartContent .nav-item .active i {
+  background-color: white;
+}
+
+.dashboard .code_group .form-control {
+  border: 0;
+  border-bottom: 1px solid #a1a7ac;
+  border-radius: 0;
+  display: inline-block;
+  width: 35px;
+  font-size: 1.2rem;
+  color: #5f6771;
+  padding: 0;
+  margin-right: 5px;
+  text-align: center;
+  line-height: 1;
+}
+
+.dashboard .rotate {
+  -webkit-animation: rotate 0.6s ease-out infinite;
+          animation: rotate 0.6s ease-out infinite;
+  -webkit-transform-origin: center;
+          transform-origin: center;
+}
+
+@-webkit-keyframes rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+@keyframes rotate {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+  }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg);
+  }
+}
+
+.dashboard #hospital_capacity .col {
+  margin-bottom: 1rem;
+}
+
+.dashboard #hospital_capacity .col input[type="number"] {
+  width: 100%;
+}
+
+.dashboard #hospital_capacity .col input[type="checkbox"] {
+  height: 1.1rem;
+  margin-top: 0rem !important;
+}
+
+.dashboard #hospital_capacity .col label {
+  margin-top: 0rem !important;
+}
+
+/* ------------------------- admin & doctor dashboard page specific ----------------------------- */
+.doctor-banner {
+  height: 250px;
+  background-image: url(../public/media/doctor-banner.png);
+  background-repeat: no-repeat;
+  background-position: center right;
+  background-size: cover;
+}
+
+/* ------------------------- doctors list specific ----------------------------- */
+.doctor .info {
+  background-color: #2b5ea9;
+  height: 70vh;
+  position: relative;
+  overflow: hidden;
+}
+
+.doctor .info::before {
+  content: "";
+  height: 200%;
+  width: 200%;
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0, #0000000a), color-stop(40%, #ffffff30));
+  background: linear-gradient(180deg, #0000000a 0, #ffffff30 40%);
+  position: absolute;
+  top: 40%;
+  left: 20%;
+  border-radius: 50%;
+  -webkit-box-sizing: border-box;
+          box-sizing: border-box;
+}
+
+/* ------------------------- doctor specific ----------------------------- */
+.step {
+  height: 10px;
+  width: 100%;
+  background-color: #bbbbbb;
+  opacity: 0.7;
+}
+
+.step.complete {
+  background-color: #008604;
+}
+
+#otpBlock input[type="number"] {
+  width: 7ch;
+  display: inline-block;
+}
+
+#successMessage {
+  font-family: Raleway;
+}
+
+/* ------------------------- doctor signup specific ----------------------------- */
+/*# sourceMappingURL=styles.css.map */
