@@ -85,16 +85,18 @@ export default function AppMain({ Component, pageProps }: AppProps) {
 				useRouter().asPath.includes(Links.Doctor.signup)
 			)
 		},
-		[userContext, setUserContext] = useState<user>({
-			mobile_no: "01676987366",
-			password: "1234",
-			name: "Emran H",
-			sex: "M",
-			dob: new Date("1997-05-02"),
-			email: "emranffl4@google.com",
-			document_id: "19975628204000005",
-			joined_on: new Date(),
-		}),
+		[userContext, setUserContext] = useState<user>(
+			// {
+			// mobile_no: "01676987366",
+			// password: "1234",
+			// name: "Emran H",
+			// sex: "M",
+			// dob: new Date("1997-05-02"),
+			// email: "emranffl4@google.com",
+			// document_id: "19975628204000005",
+			// joined_on: new Date(),
+			// }
+		),
 		[doctorContext, setDoctorContext] = useState<doctor>()
 
 	useEffect(() => {
