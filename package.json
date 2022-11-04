@@ -3,9 +3,9 @@
 	"version": "0.1.0",
 	"private": true,
 	"scripts": {
-		"dev": "next dev -p 4001",
+		"dev": "node server.js",
 		"build": "next build",
-		"start": "next start -p 4001"
+		"start": "NODE_ENV=production node server.js"
 	},
 	"dependencies": {
 		"@googlemaps/js-api-loader": "^1.12.10",
