@@ -1,5 +1,6 @@
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  binaryTargets = ["debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -19,6 +20,29 @@ model address {
   hospital        hospital @relation(fields: [registration_no], references: [registration_no], onDelete: Cascade, map: "address_fk0")
 }
 
+model appointment {
+  id              String             @id @db.Char(10)
+  user_mobile_no  String             @db.Char(10)
+  name            String             @db.VarChar(50)
+  sex             appointment_sex
+  for             appointment_for    @default(Self)
+  doctor_id       String             @db.Char(10)
+  time            DateTime           @default(now()) @db.DateTime(0)
+  status          appointment_status
+  cancelled_at    DateTime?          @db.DateTime(0)
+  cancelled_by    String?            @db.Char(10)
+  registration_no String             @db.Char(10)
+  remarks         String?            @db.TinyText
+  last_updated    DateTime           @default(now()) @db.DateTime(0)
+  user            user               @relation(fields: [user_mobile_no], references: [mobile_no], onDelete: Cascade, map: "appointment_fk0")
+  doctor          doctor             @relation(fields: [doctor_id], references: [id], onDelete: Cascade, map: "appointment_fk1")
+  hospital        hospital           @relation(fields: [registration_no], references: [registration_no], onDelete: Cascade, map: "appointment_fk2")
+
+  @@index([user_mobile_no], map: "appointment_fk0")
+  @@index([doctor_id], map: "appointment_fk1")
+  @@index([registration_no], map: "appointment_fk2")
+}
+
 model booking {
   id              String              @id @db.Char(10)
   booked_at       DateTime            @default(now()) @db.DateTime(0)
@@ -33,8 +57,8 @@ model booking {
   status          booking_status
   remarks         String?             @db.TinyText
   last_updated    DateTime            @default(now()) @db.DateTime(0)
-  hospital        hospital            @relation(fields: [registration_no], references: [registration_no], onDelete: Cascade, map: "booking_fk1")
   user            user                @relation(fields: [user_mobile_no], references: [mobile_no], onDelete: Cascade, map: "booking_fk0")
+  hospital        hospital            @relation(fields: [registration_no], references: [registration_no], onDelete: Cascade, map: "booking_fk1")
 
   @@index([user_mobile_no], map: "booking_fk0")
   @@index([registration_no], map: "booking_fk1")
@@ -50,6 +74,28 @@ model capacity {
   ccu             Int?     @db.UnsignedTinyInt
   covidu          Int?     @db.UnsignedSmallInt
   hospital        hospital @relation(fields: [registration_no], references: [registration_no], onDelete: Cascade, map: "capacity_fk0")
+}
+
+model doctor {
+  id              String            @unique @db.Char(10)
+  password        String            @db.VarChar(50)
+  email           String            @unique(map: "email") @db.VarChar(50)
+  registration_no String            @db.Char(10)
+  name            String            @db.VarChar(50)
+  sex             doctor_sex
+  department      doctor_department
+  specialization  String            @db.VarChar(512)
+  chamber         String?           @db.VarChar(10)
+  bio             String?           @db.Text
+  image_source    String?           @db.VarChar(500)
+  joined_on       DateTime          @default(now()) @db.DateTime(0)
+  status          doctor_status
+  hospital        hospital          @relation(fields: [registration_no], references: [registration_no], onDelete: Cascade, map: "doctor_fk0")
+  appointment     appointment[]
+  schedule        schedule[]
+
+  @@id([id, registration_no, joined_on])
+  @@index([registration_no], map: "doctor_fk0")
 }
 
 model hospital {
@@ -78,16 +124,27 @@ model log {
   task            String   @db.TinyText
   mobile_no       String   @db.Char(10)
   role            log_role
-  staff           staff    @relation(fields: [mobile_no], references: [mobile_no], onDelete: Cascade, map: "log_fk1")
   hospital        hospital @relation(fields: [registration_no], references: [registration_no], onDelete: Cascade, map: "log_fk0")
+  staff           staff    @relation(fields: [mobile_no], references: [mobile_no], onDelete: Cascade, map: "log_fk1")
 
   @@id([logged_at, registration_no])
   @@index([registration_no], map: "log_fk0")
   @@index([mobile_no], map: "log_fk1")
 }
 
+model schedule {
+  doctor_id    String       @db.Char(10)
+  day          schedule_day
+  start_time   DateTime     @db.Time(0)
+  end_time     DateTime     @db.Time(0)
+  last_updated DateTime     @default(now()) @db.DateTime(0)
+  doctor       doctor       @relation(fields: [doctor_id], references: [id], onDelete: Cascade, map: "schedule_fk0")
+
+  @@id([doctor_id, day])
+}
+
 model staff {
-  mobile_no       String       @db.Char(10)
+  mobile_no       String       @unique @db.Char(10)
   password        String       @db.Char(50)
   name            String       @db.VarChar(50)
   email           String       @unique(map: "email") @db.VarChar(50)
@@ -130,85 +187,33 @@ model vacant_bed_log {
   @@id([registration_no, last_updated])
 }
 
-model doctor {
-  id              String            @db.Char(10)
-  password        String            @db.VarChar(50)
-  email           String            @unique(map: "email") @db.VarChar(50)
-  registration_no String            @db.Char(10)
-  name            String            @db.VarChar(50)
-  sex             doctor_sex
-  department      doctor_department
-  specialization  String            @db.VarChar(512)
-  chamber         String?           @db.VarChar(10)
-  bio             String?           @db.Text
-  image_source    String?           @db.VarChar(500)
-  joined_on       DateTime          @default(now()) @db.DateTime(0)
-  status          doctor_status
-  hospital        hospital          @relation(fields: [registration_no], references: [registration_no], onDelete: Cascade, map: "doctor_fk0")
-  appointment     appointment[]
-  schedule        schedule[]
-
-  @@id([id, registration_no, joined_on])
-  @@index([registration_no], map: "doctor_fk0")
+enum schedule_day {
+  R
+  S
+  M
+  T
+  W
+  A
+  F
 }
 
-model schedule {
-  doctor_id    String       @db.Char(10)
-  day          schedule_day
-  start_time   DateTime     @db.Time(0)
-  end_time     DateTime     @db.Time(0)
-  last_updated DateTime     @default(now()) @db.DateTime(0)
-  doctor       doctor       @relation(fields: [doctor_id], references: [id], onDelete: Cascade, map: "schedule_fk0")
-
-  @@id([doctor_id, day])
-}
-
-model appointment {
-  id              String             @id @db.Char(10)
-  user_mobile_no  String             @db.Char(10)
-  name            String             @db.VarChar(50)
-  sex             appointment_sex
-  for             appointment_for    @default(Self)
-  doctor_id       String             @db.Char(10)
-  time            DateTime           @default(now()) @db.DateTime(0)
-  status          appointment_status
-  cancelled_at    DateTime?          @db.DateTime(0)
-  cancelled_by    String?            @db.Char(10)
-  registration_no String             @db.Char(10)
-  remarks         String?            @db.TinyText
-  last_updated    DateTime           @default(now()) @db.DateTime(0)
-  doctor          doctor             @relation(fields: [doctor_id], references: [id], onDelete: Cascade, map: "appointment_fk1")
-  hospital        hospital           @relation(fields: [registration_no], references: [registration_no], onDelete: Cascade, map: "appointment_fk2")
-  user            user               @relation(fields: [user_mobile_no], references: [mobile_no], onDelete: Cascade, map: "appointment_fk0")
-
-  @@index([user_mobile_no], map: "appointment_fk0")
-  @@index([doctor_id], map: "appointment_fk1")
-  @@index([registration_no], map: "appointment_fk2")
-}
-
-enum booking_bed_type {
-  Ward
-  Special_Ward @map("Special Ward")
-  Cabin
-  ICU
-  CCU
-  COVIDU
-}
-
-enum booking_booked_for {
-  Self
-  Father
-  Mother
-  Brother
-  Sister
-  Relative
-  Friend
-  Stranger
+enum user_sex {
+  M
+  F
+  T
+  S
 }
 
 enum hospital_hospital_type {
   Public
   Private
+}
+
+enum appointment_sex {
+  M
+  F
+  T
+  S
 }
 
 enum log_role {
@@ -230,50 +235,6 @@ enum booking_sex {
   S
 }
 
-enum user_sex {
-  M
-  F
-  T
-  S
-}
-
-enum hospital_status {
-  public
-  private
-  deleted
-}
-
-enum staff_status {
-  Active
-  Inactive
-}
-
-enum booking_status {
-  Requested
-  Booked
-  Served
-  Cancelled
-}
-
-enum doctor_status {
-  Active
-  Inactive
-}
-
-enum appointment_sex {
-  M
-  F
-  T
-  S
-}
-
-enum appointment_status {
-  Requested
-  Confirmed
-  Completed
-  Cancelled
-}
-
 enum appointment_for {
   Self
   Father
@@ -283,6 +244,20 @@ enum appointment_for {
   Relative
   Friend
   Stranger
+}
+
+enum staff_status {
+  Active
+  Inactive
+}
+
+enum booking_bed_type {
+  Ward
+  Special_Ward @map("Special Ward")
+  Cabin
+  ICU
+  CCU
+  COVIDU
 }
 
 enum doctor_sex {
@@ -296,50 +271,76 @@ enum doctor_department {
   Anesthesiology
   Audiology
   Cardiology
-  Cardiothoracic_Surgery @map("Cardiothoracic Surgery")
-  Dental_Sciences @map("Dental Sciences")
+  Cardiothoracic_Surgery         @map("Cardiothoracic Surgery")
+  Dental_Sciences                @map("Dental Sciences")
   Dermatology
   Electrophysiology
-  Emergency_Medicine @map("Emergency Medicine")
+  Emergency_Medicine             @map("Emergency Medicine")
   Endocrinology
   ENT
-  Family_Medicine @map("Family Medicine")
+  Family_Medicine                @map("Family Medicine")
   Gastroenterology
-  General_Surgery @map("General Surgery")
+  General_Surgery                @map("General Surgery")
   Genetics
   Gynecology
-  Haemato_Oncology @map("Haemato Oncology")
-  Internal_Medicine @map("Internal Medicine")
+  Haemato_Oncology               @map("Haemato Oncology")
+  Internal_Medicine              @map("Internal Medicine")
   Microbiology
   Nephrology
   Neurology
   Neurosurgery
-  Nuclear_Medicine @map("Nuclear Medicine")
-  Obstetrics_and_Gynecology @map("Obstetrics and Gynecology")
+  Nuclear_Medicine               @map("Nuclear Medicine")
+  Obstetrics_and_Gynecology      @map("Obstetrics and Gynecology")
   Oncology
   Ophthalmology
   Oral_and_Maxillofacial_Surgery @map("Oral and Maxillofacial Surgery")
   Orthopedics
   Pediatrics
   Physiotherapy
-  Plastic_Surgery @map("Plastic Surgery")
+  Plastic_Surgery                @map("Plastic Surgery")
   Psychiatry
   Pulmonology
   Radiology
-  Reproductive_Medicine @map("Reproductive Medicine")
+  Reproductive_Medicine          @map("Reproductive Medicine")
   Rheumatology
-  Stroke_Unit @map("Stroke Unit")
+  Stroke_Unit                    @map("Stroke Unit")
   Urology
-  Uro_Oncology @map("Uro Oncology")
-  Vascular_Surgery @map("Vascular Surgery")
+  Uro_Oncology                   @map("Uro Oncology")
+  Vascular_Surgery               @map("Vascular Surgery")
 }
 
-enum schedule_day {
-  A
-  S
-  M
-  T
-  W
-  R
-  F
+enum booking_booked_for {
+  Self
+  Father
+  Mother
+  Brother
+  Sister
+  Relative
+  Friend
+  Stranger
+}
+
+enum appointment_status {
+  Requested
+  Confirmed
+  Completed
+  Cancelled
+}
+
+enum hospital_status {
+  public
+  private
+  deleted
+}
+
+enum booking_status {
+  Requested
+  Booked
+  Served
+  Cancelled
+}
+
+enum doctor_status {
+  Active
+  Inactive
 }

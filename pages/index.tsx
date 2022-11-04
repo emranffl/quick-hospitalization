@@ -28,7 +28,7 @@ export const getStaticProps = async () => {
 
 	return {
 		props: {
-			latestVacantBedInfoSet,
+			latestVacantBedInfoSet: JSON.stringify(latestVacantBedInfoSet),
 		},
 		revalidate: 90 /* returning revalidate property enables the ISR that rebuilds on data change */,
 	}
@@ -39,13 +39,14 @@ export interface HospitalInfo extends vacant_bed_log {
 }
 
 export interface HomeProps {
-	latestVacantBedInfoSet: HospitalInfo[]
+	latestVacantBedInfoSet: string
 }
 
 // export const search = ()
 
 const Home: React.FC<HomeProps> = ({ latestVacantBedInfoSet }) => {
-	const [hospitalList, setHospitalList] = useState(latestVacantBedInfoSet),
+	const parsedLatestVacantBedInfoSet = JSON.parse(latestVacantBedInfoSet),
+		[hospitalList, setHospitalList] = useState(parsedLatestVacantBedInfoSet),
 		[loading, setLoading] = useState(false)
 
 	useEffect(function onFirstMount() {
@@ -87,7 +88,7 @@ const Home: React.FC<HomeProps> = ({ latestVacantBedInfoSet }) => {
 							<Link href={Links.App.booking}>
 								<a
 									className="d-block text-decoration-none my-2 animate__animated animate__fadeInUp"
-									// style={{ top: "100%", position: "relative" }}
+								// style={{ top: "100%", position: "relative" }}
 								>
 									<i className="bi bi-bookmark-plus d-block text-center h3 text-light"></i>
 									<span className="text-light h6 fw-light">Book a bed</span>
