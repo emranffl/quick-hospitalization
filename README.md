@@ -45,11 +45,17 @@ Now paste the .env file provided in the project root folder and edit the values 
 npm run start
 ```
 
+![home page](public/git/1.png)
+
 Now open [http://localhost:4001](http://localhost:4001) on your browser to see the website. The landing page is the first user view with a list of hospitals with their name and vacancies. The user can navigate between pages from the navbar.
 
 Hospital administration can access the website from [http://localhost:4001/admin](http://localhost:4001/admin) where a registered hospital employee can login with their credentials. An admin will have full control over the hospital info management from the dashboard.
 
 To register a hospital, head on to [http://localhost:4001/admin/signup](http://localhost:4001/admin/signup), and enter the required hospital info. On signup success, the user will be redirected to the dashboard where they have full control. The new employee is signed up as admin of the hospital.
+
+![doctor's description page](public/git/2.png)
+
+The doctors portal can be accessed from [http://localhost:4001/doctor/login](http://localhost:4001/doctor/login) where the doctor has access to their own dashboard, manage appointments & their profile. 
 
 API routes can be accessed on `http://localhost:4001/api/`[API-name]. This endpoint can be found in `pages/api/`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
 
